@@ -35,65 +35,90 @@ class MainPage extends StatelessWidget {
                 valueListenable: patientsBox.listenable(),
                 builder: (context, Box<Patient> patients, _) {
                   return Stack(children: [
-                    Container(
-                      color: Colors.blueGrey[200],
-                      padding: EdgeInsets.all(20),
-                      child: ListView.builder(
-                          itemCount: patients.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (_, index) {
-                            Patient patient = patients.getAt(index);
-                            return Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 6,
-                                        offset: Offset(3, 3),
-                                        color: Colors.black.withOpacity(0.5))
-                                  ]),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(left: 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Nama : ${patient.name}"),
-                                        Text(
-                                            "Umur : ${patient.age.toString()}"),
-                                        Text(
-                                            "Jenis Kelamin : ${patient.gender}"),
-                                        Text("Penyakit : ${patient.disease}"),
-                                        Text(
-                                            "Lokasi Perawatan : ${patient.location}")
-                                      ],
-                                    ),
-                                  ),
-                                  Column(
+                    ListView(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height,
+                          color: Colors.blueGrey[200],
+                          child: ListView.builder(
+                              itemCount: patients.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (_, index) {
+                                Patient patient = patients.getAt(index);
+                                return Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(
+                                      bottom: index == patients.length - 1
+                                          ? 170
+                                          : 0,
+                                      left: 20,
+                                      right: 20,
+                                      top: index == 0 ? 20 : 14),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 6,
+                                            offset: Offset(3, 3),
+                                            color:
+                                                Colors.black.withOpacity(0.5))
+                                      ]),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      IconButton(
-                                          icon: Icon(Icons.edit),
-                                          color: Colors.blueAccent,
-                                          onPressed: () {}),
-                                      IconButton(
-                                          icon: Icon(Icons.delete),
-                                          color: Colors.red,
-                                          onPressed: () {
-                                            patients.deleteAt(index);
-                                          }),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Nama : ${patient.name}"),
+                                            Text(
+                                                "Umur : ${patient.age.toString()}"),
+                                            Text(
+                                                "Jenis Kelamin : ${patient.gender}"),
+                                            Text(
+                                                "Penyakit : ${patient.disease}"),
+                                            Text(
+                                                "Lokasi Perawatan : ${patient.location}")
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          IconButton(
+                                              icon: Icon(Icons.edit),
+                                              color: Colors.blueAccent,
+                                              onPressed: () {}),
+                                          IconButton(
+                                              icon: Icon(Icons.delete),
+                                              color: Colors.red,
+                                              onPressed: () {
+                                                patients.deleteAt(index);
+                                                Flushbar(
+                                                    duration: Duration(
+                                                        milliseconds: 1500),
+                                                    flushbarPosition:
+                                                        FlushbarPosition.TOP,
+                                                    backgroundColor: Colors.red,
+                                                    message:
+                                                        "Data pasien dihapus",
+                                                    icon: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.white,
+                                                    ))
+                                                  ..show(context);
+                                              }),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
-                              ),
-                            );
-                          }),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
                     ),
                     Align(
                         alignment: Alignment.bottomRight,
@@ -119,7 +144,10 @@ class MainPage extends StatelessWidget {
                                                   CustomTextField(
                                                       nameController, "Nama"),
                                                   CustomTextField(
-                                                      ageController, "Umur"),
+                                                    ageController,
+                                                    "Umur",
+                                                    inputNumber: true,
+                                                  ),
                                                   CustomTextField(
                                                       genderController,
                                                       "Jenis Kelamin"),
@@ -146,18 +174,73 @@ class MainPage extends StatelessWidget {
                                                             locationController
                                                                 .text;
 
-                                                        Patient patient =
-                                                            Patient(
-                                                                name,
-                                                                int.parse(age),
-                                                                gender,
-                                                                disease,
-                                                                location);
+                                                        if (!(name.trim() != "" &&
+                                                            age.trim() != "" &&
+                                                            gender.trim() !=
+                                                                "" &&
+                                                            disease.trim() !=
+                                                                "" &&
+                                                            location.trim() !=
+                                                                "")) {
+                                                          Flushbar(
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      1500),
+                                                              flushbarPosition:
+                                                                  FlushbarPosition
+                                                                      .TOP,
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              message:
+                                                                  "Isi semua field",
+                                                              icon: Icon(
+                                                                  Icons.warning,
+                                                                  color: Colors
+                                                                      .white))
+                                                            ..show(context);
+                                                        } else {
+                                                          Patient patient =
+                                                              Patient(
+                                                                  name,
+                                                                  int.parse(
+                                                                      age),
+                                                                  gender,
+                                                                  disease,
+                                                                  location);
+                                                          patientsBox
+                                                              .add(patient);
 
-                                                        patientsBox
-                                                            .add(patient);
+                                                          Navigator.pop(
+                                                              context);
 
-                                                        Navigator.pop(context);
+                                                          nameController
+                                                              .clear();
+                                                          ageController.clear();
+                                                          genderController
+                                                              .clear();
+                                                          diseaseController
+                                                              .clear();
+                                                          locationController
+                                                              .clear();
+
+                                                          Flushbar(
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      1500),
+                                                              flushbarPosition:
+                                                                  FlushbarPosition
+                                                                      .TOP,
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                              message:
+                                                                  "Data berhasil ditambahkan",
+                                                              icon: Icon(
+                                                                  Icons
+                                                                      .check_box,
+                                                                  color: Colors
+                                                                      .white))
+                                                            ..show(context);
+                                                        }
                                                       },
                                                       child: Text(
                                                         "Tambahkan",
