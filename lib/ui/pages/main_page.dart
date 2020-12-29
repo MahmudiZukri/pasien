@@ -23,7 +23,10 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Pengelola Data Pasien Meninggal"),
+        title: Text(
+          "Pengelola Data Pasien Meninggal",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: FutureBuilder(
         future: Hive.openBox<Patient>(boxName),
@@ -36,10 +39,10 @@ class _MainPageState extends State<MainPage> {
             } else {
               Box<Patient> patientsBox = Hive.box<Patient>(boxName);
               if (patientsBox.length == 0) {
-                patientsBox.add(Patient(
-                    "Robert", 10, "Pria", "Serangan Jantung", "Mayo Clinic"));
-                patientsBox.add(Patient(
-                    "Selena", 29, "Wanita", "Covid-19", "Cleveland Clinic"));
+                patientsBox.add(Patient("Eren Yeager", 10, "Pria",
+                    "Serangan Jantung", "Mayo Clinic"));
+                patientsBox.add(Patient("Malty S. Melromarc", 29, "Wanita",
+                    "Covid-19", "Cleveland Clinic"));
               }
               return ValueListenableBuilder(
                 valueListenable: patientsBox.listenable(),
@@ -56,7 +59,7 @@ class _MainPageState extends State<MainPage> {
                               itemBuilder: (_, index) {
                                 Patient patient = patients.getAt(index);
                                 return Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                                   margin: EdgeInsets.only(
                                       bottom: index == patients.length - 1
                                           ? 170
@@ -91,7 +94,7 @@ class _MainPageState extends State<MainPage> {
                                                     0.66,
                                                 child: Text(
                                                     "Nama : ${patient.name}",
-                                                    maxLines: 1,
+                                                    maxLines: 2,
                                                     overflow:
                                                         TextOverflow.clip)),
                                             Text(
@@ -104,8 +107,8 @@ class _MainPageState extends State<MainPage> {
                                                         .width *
                                                     0.66,
                                                 child: Text(
-                                                    "Nama : ${patient.disease}",
-                                                    maxLines: 1,
+                                                    "Penyakit : ${patient.disease}",
+                                                    maxLines: 2,
                                                     overflow:
                                                         TextOverflow.clip)),
                                             Container(
@@ -114,8 +117,8 @@ class _MainPageState extends State<MainPage> {
                                                         .width *
                                                     0.66,
                                                 child: Text(
-                                                    "Nama : ${patient.location}",
-                                                    maxLines: 1,
+                                                    "Lokasi Perawatan : ${patient.location}",
+                                                    maxLines: 2,
                                                     overflow:
                                                         TextOverflow.clip)),
                                           ],
@@ -169,7 +172,7 @@ class _MainPageState extends State<MainPage> {
                                                                 padding:
                                                                     EdgeInsets
                                                                         .all(
-                                                                            10),
+                                                                            18),
                                                                 child: ListView(
                                                                     shrinkWrap:
                                                                         true,
@@ -189,6 +192,9 @@ class _MainPageState extends State<MainPage> {
                                                                       CustomTextField(
                                                                           locationController,
                                                                           "Lokasi Perawatan"),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              5),
                                                                       Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceEvenly,
@@ -197,6 +203,8 @@ class _MainPageState extends State<MainPage> {
                                                                               genreList[0],
                                                                               0,
                                                                               setState),
+                                                                          SizedBox(
+                                                                              width: 10),
                                                                           customGenderButton(
                                                                               genreList[1],
                                                                               1,
@@ -205,7 +213,7 @@ class _MainPageState extends State<MainPage> {
                                                                       ),
                                                                       SizedBox(
                                                                           height:
-                                                                              5),
+                                                                              16),
                                                                       FlatButton(
                                                                           onPressed:
                                                                               () {
@@ -291,6 +299,7 @@ class _MainPageState extends State<MainPage> {
                         child: Container(
                           margin: EdgeInsets.all(16),
                           child: FloatingActionButton(
+                              backgroundColor: Colors.teal,
                               child: Icon(
                                 Icons.add,
                                 size: 30,
@@ -304,9 +313,9 @@ class _MainPageState extends State<MainPage> {
                                         return Dialog(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(10)),
+                                                    BorderRadius.circular(15)),
                                             child: Padding(
-                                                padding: EdgeInsets.all(10),
+                                                padding: EdgeInsets.all(18),
                                                 child: ListView(
                                                     shrinkWrap: true,
                                                     children: [
@@ -324,6 +333,7 @@ class _MainPageState extends State<MainPage> {
                                                       CustomTextField(
                                                           locationController,
                                                           "Lokasi Perawatan"),
+                                                      SizedBox(height: 5),
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -333,13 +343,14 @@ class _MainPageState extends State<MainPage> {
                                                               genreList[0],
                                                               0,
                                                               setState),
+                                                          SizedBox(width: 10),
                                                           customGenderButton(
                                                               genreList[1],
                                                               1,
                                                               setState),
                                                         ],
                                                       ),
-                                                      SizedBox(height: 5),
+                                                      SizedBox(height: 16),
                                                       FlatButton(
                                                           onPressed: () {
                                                             //add patient data
@@ -465,24 +476,30 @@ class _MainPageState extends State<MainPage> {
 
   Widget customGenderButton(AssetImage image, int index, StateSetter setState) {
     return OutlineButton(
-        onPressed: () {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        borderSide: BorderSide(
-            color: (selectedIndex == index)
-                ? selectedIndex == 0
-                    ? Colors.blueAccent
-                    : Colors.pink
-                : Colors.grey),
+      onPressed: () {
+        setState(() {
+          selectedIndex = index;
+        });
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      borderSide: BorderSide(
+          color: (selectedIndex == index)
+              ? selectedIndex == 0
+                  ? Colors.blueAccent
+                  : Colors.pink
+              : Colors.grey),
+      child: Container(
+        height: 48,
+        width: MediaQuery.of(context).size.width * 0.23,
+        padding: EdgeInsets.all(5),
         child: Image(
             image: image,
             color: (selectedIndex == index)
                 ? selectedIndex == 0
                     ? Colors.blueAccent
                     : Colors.pink
-                : Colors.grey));
+                : Colors.grey),
+      ),
+    );
   }
 }
