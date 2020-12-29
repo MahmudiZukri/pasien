@@ -1,4 +1,5 @@
-# pasien
+# Aplikasi sederhana untuk mengelola data pasien yang telah meninggal, dibuat dengan menggunakan Hive ( database lokal ). Aplikasi ini dibuat untuk memenuhi tugas kuliah.
+English: Simple application to manage data of patients who have died, created using Hive (local database). This application was made to fulfill college assignments.
 
 A new Flutter project.
 
