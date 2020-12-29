@@ -36,10 +36,10 @@ class _MainPageState extends State<MainPage> {
             } else {
               Box<Patient> patientsBox = Hive.box<Patient>(boxName);
               if (patientsBox.length == 0) {
-                patientsBox.add(Patient("Robert", 10, "Laki laki",
-                    "Serangan Jantung", "Mayo Clinic"));
                 patientsBox.add(Patient(
-                    "Selena", 29, "Perempuan", "Covid-19", "Cleveland Clinic"));
+                    "Robert", 10, "Pria", "Serangan Jantung", "Mayo Clinic"));
+                patientsBox.add(Patient(
+                    "Selena", 29, "Wanita", "Covid-19", "Cleveland Clinic"));
               }
               return ValueListenableBuilder(
                 valueListenable: patientsBox.listenable(),
@@ -123,14 +123,145 @@ class _MainPageState extends State<MainPage> {
                                       ),
                                       Column(
                                         children: [
-                                          // IconButton(
-                                          //     icon: Icon(Icons.edit),
-                                          //     color: Colors.blueAccent,
-                                          //     onPressed: () {}),
+                                          IconButton(
+                                              icon: Icon(Icons.edit),
+                                              color: Colors.blueAccent,
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      nameController.text =
+                                                          patients
+                                                              .getAt(index)
+                                                              .name;
+                                                      ageController.text =
+                                                          patients
+                                                              .getAt(index)
+                                                              .age
+                                                              .toString();
+                                                      diseaseController.text =
+                                                          patients
+                                                              .getAt(index)
+                                                              .disease;
+                                                      locationController.text =
+                                                          patients
+                                                              .getAt(index)
+                                                              .location;
+                                                      selectedIndex = patients
+                                                                  .getAt(index)
+                                                                  .gender ==
+                                                              'Pria'
+                                                          ? 0
+                                                          : 1;
+
+                                                      return StatefulBuilder(
+                                                          builder: (context,
+                                                              StateSetter
+                                                                  setState) {
+                                                        return Dialog(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            child: Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            10),
+                                                                child: ListView(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    children: [
+                                                                      CustomTextField(
+                                                                          nameController,
+                                                                          "Nama"),
+                                                                      CustomTextField(
+                                                                        ageController,
+                                                                        "Umur",
+                                                                        inputNumber:
+                                                                            true,
+                                                                      ),
+                                                                      CustomTextField(
+                                                                          diseaseController,
+                                                                          "Penyakit"),
+                                                                      CustomTextField(
+                                                                          locationController,
+                                                                          "Lokasi Perawatan"),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          customGenderButton(
+                                                                              genreList[0],
+                                                                              0,
+                                                                              setState),
+                                                                          customGenderButton(
+                                                                              genreList[1],
+                                                                              1,
+                                                                              setState),
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              5),
+                                                                      FlatButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            //update patient data
+
+                                                                            String
+                                                                                name =
+                                                                                nameController.text;
+                                                                            String
+                                                                                age =
+                                                                                ageController.text;
+
+                                                                            String
+                                                                                disease =
+                                                                                diseaseController.text;
+
+                                                                            String
+                                                                                location =
+                                                                                locationController.text;
+
+                                                                            if (!(name.trim() != "" &&
+                                                                                age.trim() != "" &&
+                                                                                selectedIndex != null &&
+                                                                                disease.trim() != "" &&
+                                                                                location.trim() != "")) {
+                                                                              Flushbar(duration: Duration(milliseconds: 1500), flushbarPosition: FlushbarPosition.TOP, backgroundColor: Colors.red, message: "Isi semua field", icon: Icon(Icons.warning, color: Colors.white))..show(context);
+                                                                            } else {
+                                                                              Patient patient = Patient(name, int.parse(age), (selectedIndex == 0) ? "Pria" : "Wanita", disease, location);
+                                                                              patientsBox.putAt(index, patient);
+
+                                                                              Navigator.pop(context);
+
+                                                                              Flushbar(duration: Duration(milliseconds: 1500), flushbarPosition: FlushbarPosition.TOP, backgroundColor: Colors.green, message: "Data berhasil diubah", icon: Icon(Icons.check_box, color: Colors.white))..show(context);
+
+                                                                              nameController.clear();
+                                                                              ageController.clear();
+                                                                              selectedIndex = 0;
+                                                                              diseaseController.clear();
+                                                                              locationController.clear();
+                                                                            }
+                                                                          },
+                                                                          child:
+                                                                              Text(
+                                                                            "Ubah",
+                                                                            style:
+                                                                                TextStyle(color: Colors.blueGrey[800]),
+                                                                          ))
+                                                                    ])));
+                                                      });
+                                                    });
+                                              }),
                                           IconButton(
                                               icon: Icon(Icons.delete),
                                               color: Colors.red,
                                               onPressed: () {
+                                                //delete patient data
                                                 patients.deleteAt(index);
                                                 Flushbar(
                                                     duration: Duration(
@@ -211,7 +342,7 @@ class _MainPageState extends State<MainPage> {
                                                       SizedBox(height: 5),
                                                       FlatButton(
                                                           onPressed: () {
-                                                            //add patient in hive
+                                                            //add patient data
                                                             final String name =
                                                                 nameController
                                                                     .text;
@@ -223,6 +354,7 @@ class _MainPageState extends State<MainPage> {
                                                                 disease =
                                                                 diseaseController
                                                                     .text;
+
                                                             final String
                                                                 location =
                                                                 locationController
