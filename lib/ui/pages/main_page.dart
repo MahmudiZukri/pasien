@@ -167,7 +167,7 @@ class _MainPageState extends State<MainPage> {
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            10)),
+                                                                            15)),
                                                             child: Padding(
                                                                 padding:
                                                                     EdgeInsets
@@ -204,7 +204,7 @@ class _MainPageState extends State<MainPage> {
                                                                               0,
                                                                               setState),
                                                                           SizedBox(
-                                                                              width: 10),
+                                                                              width: 14),
                                                                           customGenderButton(
                                                                               genreList[1],
                                                                               1,
@@ -343,7 +343,7 @@ class _MainPageState extends State<MainPage> {
                                                               genreList[0],
                                                               0,
                                                               setState),
-                                                          SizedBox(width: 10),
+                                                          SizedBox(width: 14),
                                                           customGenderButton(
                                                               genreList[1],
                                                               1,
@@ -474,7 +474,11 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget customGenderButton(AssetImage image, int index, StateSetter setState) {
+  Widget customGenderButton(
+    AssetImage image,
+    int index,
+    StateSetter setState,
+  ) {
     return OutlineButton(
       onPressed: () {
         setState(() {
@@ -490,8 +494,8 @@ class _MainPageState extends State<MainPage> {
               : Colors.grey),
       child: Container(
         height: 48,
-        width: MediaQuery.of(context).size.width * 0.23,
-        padding: EdgeInsets.all(5),
+        width: (MediaQuery.of(context).size.width - 196) / 2,
+        padding: EdgeInsets.all(10),
         child: Image(
             image: image,
             color: (selectedIndex == index)
