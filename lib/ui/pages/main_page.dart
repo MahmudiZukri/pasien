@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Pengelola Data Pasien Meninggal",
+          "Pengelola Data Pasien",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -214,7 +214,7 @@ class _MainPageState extends State<MainPage> {
                                                                       SizedBox(
                                                                           height:
                                                                               16),
-                                                                      FlatButton(
+                                                                      TextButton(
                                                                           onPressed:
                                                                               () {
                                                                             //update patient data
@@ -351,7 +351,7 @@ class _MainPageState extends State<MainPage> {
                                                         ],
                                                       ),
                                                       SizedBox(height: 16),
-                                                      FlatButton(
+                                                      TextButton(
                                                           onPressed: () {
                                                             //add patient data
                                                             final String name =
@@ -479,31 +479,31 @@ class _MainPageState extends State<MainPage> {
     int index,
     StateSetter setState,
   ) {
-    return OutlineButton(
-      onPressed: () {
-        setState(() {
-          selectedIndex = index;
-        });
-      },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      borderSide: BorderSide(
-          color: (selectedIndex == index)
-              ? selectedIndex == 0
-                  ? Colors.blueAccent
-                  : Colors.pink
-              : Colors.grey),
-      child: Container(
-        height: 48,
-        width: (MediaQuery.of(context).size.width - 196) / 2,
-        padding: EdgeInsets.all(10),
-        child: Image(
-            image: image,
-            color: (selectedIndex == index)
-                ? selectedIndex == 0
-                    ? Colors.blueAccent
-                    : Colors.pink
-                : Colors.grey),
-      ),
-    );
+    return OutlinedButton(
+        onPressed: () {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        style: OutlinedButton.styleFrom(
+            side: BorderSide(
+                color: (selectedIndex == index)
+                    ? selectedIndex == 0
+                        ? Colors.blueAccent
+                        : Colors.pink
+                    : Colors.grey),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+        child: Container(
+            height: 48,
+            width: (MediaQuery.of(context).size.width - 196) / 2,
+            padding: EdgeInsets.all(10),
+            child: Image(
+                image: image,
+                color: (selectedIndex == index)
+                    ? selectedIndex == 0
+                        ? Colors.blueAccent
+                        : Colors.pink
+                    : Colors.grey)));
   }
 }

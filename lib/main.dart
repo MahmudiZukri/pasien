@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Raleway', primaryColor: Colors.teal),
       debugShowCheckedModeBanner: false,
-      home: MainPage(),
+      home: LoginPage(),
     );
   }
 }
